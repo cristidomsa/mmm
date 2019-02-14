@@ -105,13 +105,18 @@ class InstaActions:
             
         return self._clean_data(followers)
 
+    def get_common(self, followers, following):
+        return [i for i in followers for j in following if i['username']==j['username']]
+
     def do(self):
         """Executes the desired operations (from specs)
         """
-
+        followers = self.get_followers(self.user_account_id)
+        following = self.get_following(self.insta.username_id)
+        commons = self.get_common(followers, following)
         if self.user_account_id is not None:
-            self._write_csv(self.user_account +'_followers.csv', self.get_followers(self.user_account_id))
-        self._write_csv(self.insta.username +'_following.csv', self.get_following(self.insta.username_id))
+            self._write_csv(self.user_account +'_followers.csv', followers)
+        self._write_csv(self.insta.username +'_following.csv', commons)
 
         print('Files written!')
 
